@@ -1,0 +1,53 @@
+name: Build and Push to ECR
+
+on:
+  push:
+    paths:
+      - 'src/**'
+      - '.github/workflows/ci.yml'
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker image to ECR
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      #GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Get Git commit SHA
+      id: vars
+      run: echo "GIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+
+    - name: Log in to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build Docker image
+      run: |
+        docker build -t $ECR_REPOSITORY:app-${GIT_SHA} .
+    
+    - name: Tag Docker image
+      run: |
+        docker tag $ECR_REPOSITORY:app-${GIT_SHA} $ECR_REPOSITORY:latest
+
+    - name: Push Docker image to ECR
+      run: |
+        docker push $ECR_REPOSITORY:app-${GIT_SHA}
+        docker push $ECR_REPOSITORY:latest
