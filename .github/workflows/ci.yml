@@ -10,20 +10,19 @@ on:
 
 jobs:
   build-and-push:
-    name: Build and Push Docker image to ECR
+    name: Build, Push to ECR, and Update Values.yaml
     runs-on: ubuntu-latest
 
     permissions:
       id-token: write
-      contents: read
+      contents: write   # Needed to push to the manifests repo
 
     env:
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      #GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
     steps:
-    - name: Checkout code
+    - name: Checkout app code
       uses: actions/checkout@v4
 
     - name: Configure AWS credentials (OIDC)
@@ -42,12 +41,23 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t $ECR_REPOSITORY:app-${GIT_SHA} .
-    
-    - name: Tag Docker image
-      run: |
-        docker tag $ECR_REPOSITORY:app-${GIT_SHA} $ECR_REPOSITORY:latest
 
     - name: Push Docker image to ECR
       run: |
         docker push $ECR_REPOSITORY:app-${GIT_SHA}
-        docker push $ECR_REPOSITORY:latest
+
+    - name: Clone manifests repo
+      run: |
+        git clone https://github.com/anzhela-iondem/FP_1_kube_argocd.git
+
+    - name: Update image tag in values.yaml
+      run: |
+        sed -i "s|tag: .*|tag: app-${GIT_SHA}|" FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
+
+    - name: Commit and push changes to manifests repo
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "actions@github.com"
+        git add FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
+        git commit -m "Update image tag to app-${GIT_SHA}" || echo "No changes to commit"
+        git push origin main
