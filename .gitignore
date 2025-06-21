@@ -14,3 +14,9 @@ build/
 .out/
 .env
 .env.*
+
+# === Docker ===
+*.tar
+*.img
+*.log
+docker-compose.override.yml
