@@ -50,16 +50,21 @@ jobs:
       run: |
         git clone https://github.com/anzhela-iondem/FP_1_kube_argocd.git
         cd FP_1_kube_argocd/
-
-    - name: Update image tag in values.yaml
-      run: |
-        sed -i "s|tag: .*|tag: app-${GIT_SHA}|" FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
-        cat FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
-
-    - name: Commit and push changes to manifests repo
-      run: |
-        git config user.name "GitHub Actions Bot"
-        git config user.email "actions@github.com"
+        sed -i "s|tag: .*|tag: app-${GIT_SHA}|" ./kube-gitops/helm/fake-project-app/values.yaml
+        cat ./kube-gitops/helm/fake-project-app/values.yaml
         git add -A
         git commit -m "Update image tag to app-${GIT_SHA}" || echo "No changes to commit"
         git push origin main
+
+    # - name: Update image tag in values.yaml
+    #   run: |
+    #     sed -i "s|tag: .*|tag: app-${GIT_SHA}|" FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
+    #     cat FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
+
+    # - name: Commit and push changes to manifests repo
+    #   run: |
+    #     git config user.name "GitHub Actions Bot"
+    #     git config user.email "actions@github.com"
+    #     git add -A
+    #     git commit -m "Update image tag to app-${GIT_SHA}" || echo "No changes to commit"
+    #     git push origin main
