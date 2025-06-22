@@ -59,6 +59,6 @@ jobs:
       run: |
         git config user.name "GitHub Actions Bot"
         git config user.email "actions@github.com"
-        git add FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
+        git add FP_1_kube_argocd/
         git commit -m "Update image tag to app-${GIT_SHA}" || echo "No changes to commit"
         git push origin main
