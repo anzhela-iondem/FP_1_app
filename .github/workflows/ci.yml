@@ -53,6 +53,7 @@ jobs:
     - name: Update image tag in values.yaml
       run: |
         sed -i "s|tag: .*|tag: app-${GIT_SHA}|" FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
+        cat FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
 
     - name: Commit and push changes to manifests repo
       run: |
