@@ -52,6 +52,8 @@ jobs:
         cd FP_1_kube_argocd/
         sed -i "s|tag: .*|tag: app-${GIT_SHA}|" ./kube-gitops/helm/fake-project-app/values.yaml
         cat ./kube-gitops/helm/fake-project-app/values.yaml
+        git config user.name "GitHub Actions Bot"
+        git config user.email "actions@github.com"
         git add -A
         git commit -m "Update image tag to app-${GIT_SHA}" || echo "No changes to commit"
         git push origin main
