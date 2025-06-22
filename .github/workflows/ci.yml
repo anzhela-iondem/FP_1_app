@@ -49,7 +49,8 @@ jobs:
 
     - name: Clone manifests repo
       run: |
-        git clone https://github.com/anzhela-iondem/FP_1_app.git
+        git clone https://github.com/anzhela-iondem/FP_1_kube_argocd
+        ls la
 
     - name: Update image tag in values.yaml
       run: |
