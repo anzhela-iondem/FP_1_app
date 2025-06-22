@@ -20,7 +20,7 @@ jobs:
     env:
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     steps:
     - name: Checkout app code
