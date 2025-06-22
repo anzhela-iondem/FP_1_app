@@ -58,8 +58,11 @@ jobs:
 
     - name: Commit and push changes to manifests repo
       run: |
+        cd FP_1_kube_argocd/
         git config user.name "GitHub Actions Bot"
         git config user.email "actions@github.com"
-        git add FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
-        git commit -m "Update image tag to app-${GIT_SHA}" || echo "No changes to commit"
+        
+        git commit -a -m "Update image tag to app-${GIT_SHA}" || echo "No changes to commit"
         git push origin main
+
+      #git add FP_1_kube_argocd/kube-gitops/helm/fake-project-app/values.yaml
