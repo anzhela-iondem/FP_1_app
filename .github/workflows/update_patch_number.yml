@@ -1,0 +1,49 @@
+name: Bump Patch Version
+
+on:
+  push:
+    paths-ignore:
+      - 'scr/versioning'   # Don't trigger when only this file changes
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # Needed to push changes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js (for jq alternative if needed)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Bump patch version
+        run: |
+          FILE="scr/versioning"
+
+          # Extract version
+          VERSION=$(jq -r '.version' $FILE)
+          IFS='.' read -r major minor patch <<< "$VERSION"
+
+          # Increment patch
+          patch=$((patch + 1))
+          NEW_VERSION="$major.$minor.$patch"
+
+          # Update file
+          jq --arg v "$NEW_VERSION" '.version=$v' $FILE > tmp.$$.json && mv tmp.$$.json $FILE
+
+          echo "Updated version to $NEW_VERSION"
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add scr/versioning
+          git commit -m "Bump version to $(jq -r '.version' scr/versioning)"
+          git push
+
