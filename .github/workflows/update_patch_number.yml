@@ -5,11 +5,11 @@
 name: Bump Version on Merge to Main
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '.github/**'
+  # push:
+  #   branches:
+  #     - main
+  #   paths-ignore:
+  #     - '.github/**'
   pull_request:
     branches:
       - main
