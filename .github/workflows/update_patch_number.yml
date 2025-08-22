@@ -1,6 +1,6 @@
-# This GitHub Actions workflow automatically bumps the patch version in src/versioning
-# whenever a pull request is merged into the main branch (excluding changes in .github/**).
-# It commits the updated version file back to the repository.
+## This GitHub Actions workflow automatically bumps the patch version in src/versioning
+## whenever a pull request is merged into the main branch (excluding changes in .github/**).
+## It commits the updated version file back to the repository.
 
 name: Bump Version on Merge to Main
 
