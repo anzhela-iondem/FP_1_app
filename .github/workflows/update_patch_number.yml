@@ -3,7 +3,7 @@ name: Bump Patch Version
 on:
   push:
     paths-ignore:
-      - 'scr/versioning'   # Don't trigger when only this file changes
+      - 'src/versioning'   # Don't trigger when only this file changes
 
 jobs:
   bump-version:
