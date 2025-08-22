@@ -6,10 +6,10 @@ name: Bump Version on Merge to Main
 
 on:
   pull_request:
-    types:
-      - closed
     branches:
       - main
+    types:
+      - closed
     paths-ignore:
       - '.github/**'
 
