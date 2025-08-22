@@ -4,6 +4,7 @@ on:
   push:
     paths-ignore:
       - 'src/versioning'   # Don't trigger when only this file changes
+      - '.github'
 
 jobs:
   bump-version:
