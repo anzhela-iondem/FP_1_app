@@ -24,7 +24,7 @@ jobs:
 
       - name: Bump patch version
         run: |
-          FILE="scr/versioning"
+          FILE="src/versioning"
 
           # Extract version
           VERSION=$(jq -r '.version' $FILE)
@@ -43,7 +43,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add scr/versioning
-          git commit -m "Bump version to $(jq -r '.version' scr/versioning)"
+          git add src/versioning
+          git commit -m "Bump version to $(jq -r '.version' src/versioning)"
           git push
 
