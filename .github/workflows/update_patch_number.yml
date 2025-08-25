@@ -2,7 +2,8 @@
 # this workflow automatically increments the patch version number in src/assets/softr-settings.json. 
 # The updated file is then committed back to the master/main branch of the repository.
 
-name: Increment the Patch Version on Merge to Master/main
+
+name: Increment the Patch Version on Merge to main
 
 on:
   pull_request:
@@ -28,26 +29,26 @@ jobs:
           persist-credentials: true
           fetch-depth: 0
 
+      - name: Switch to main
+        run: |
+          git checkout main
+          
       - name: Bump patch version
         id: bump
         run: |
-          FILE=src/versioning
+          FILE=src\assets\softr-settings.json
           VERSION=$(jq -r '.version' $FILE)
           BASE=$(echo $VERSION | cut -d. -f1-2)
           PATCH=$(echo $VERSION | cut -d. -f3)
           NEW_PATCH=$((PATCH+1))
           NEW_VERSION="$BASE.$NEW_PATCH"
-
           echo "New version: $NEW_VERSION"
           jq --arg v "$NEW_VERSION" '.version=$v' $FILE > tmp && mv tmp $FILE
-
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
-
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add src/versioning
+          git add src\assets\softr-settings.json
           git commit -m "Bump version to ${{ steps.bump.outputs.version }}" || echo "No changes to commit"
-          git push
+          git push origin master
