@@ -36,7 +36,7 @@ jobs:
       - name: Bump patch version
         id: bump
         run: |
-          FILE=src\assets\softr-settings.json
+          FILE=src\versioning
           VERSION=$(jq -r '.version' $FILE)
           BASE=$(echo $VERSION | cut -d. -f1-2)
           PATCH=$(echo $VERSION | cut -d. -f3)
