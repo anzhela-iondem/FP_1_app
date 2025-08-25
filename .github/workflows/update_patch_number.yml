@@ -1,6 +1,7 @@
-# This GitHub Actions workflow automatically bumps the patch version in src/versioning
-# whenever a pull request is merged into the main branch (excluding changes in .github/**).
-# It commits the updated version file back to the repository.
+# When a pull request is merged into the master/main branch (excluding changes in .github/**), 
+# this workflow automatically increments the patch version number in src/assets/softr-settings.json. 
+# The updated file is then committed back to the master/main branch of the repository.
+
 
 name: Increment the Patch Version on Merge to main
 
